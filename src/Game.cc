@@ -8,8 +8,6 @@
 
 using namespace std::literals::chrono_literals;
 
-#define NS_PER_UPDATE 1000
-
 namespace Breakout {
     Game::Game() {
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -37,7 +35,7 @@ namespace Breakout {
 
     auto Game::run() -> void {
         is_running_ = true;
-        constexpr std::chrono::nanoseconds timestep(16ms);
+        constexpr std::chrono::nanoseconds timestep{16ms};
 
         auto previous_time = std::chrono::steady_clock::now();
         auto lag = std::chrono::nanoseconds{0ns};
@@ -50,20 +48,12 @@ namespace Breakout {
             poll_events();
 
             while (lag > timestep) {
-                update(current_time);
+                update(lag);
                 lag -= timestep;
             }
 
-            render(current_time);
+            render(lag / timestep);
         }
-    }
-
-    auto Game::window() const noexcept -> SDL_Window * {
-        return window_;
-    }
-
-    auto Game::renderer() const noexcept -> SDL_Renderer * {
-        return renderer_;
     }
 
     auto Game::poll_events() -> void {
@@ -75,11 +65,11 @@ namespace Breakout {
         }
     }
 
-    auto Game::update(const std::chrono::time_point<std::chrono::steady_clock> &time) -> void {
+    auto Game::update(const std::chrono::nanoseconds &delta_time) -> void {
 
     }
 
-    auto Game::render(const std::chrono::time_point<std::chrono::steady_clock> &time) -> void {
+    auto Game::render(const std::chrono::nanoseconds &delta_time) -> void {
 
     }
 

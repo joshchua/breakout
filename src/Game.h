@@ -14,10 +14,8 @@ namespace Breakout {
         auto renderer() const noexcept -> SDL_Renderer *;
     private:
         auto poll_events() -> void;
-        auto update(const std::chrono::time_point<std::chrono::steady_clock> &time) -> void;
-        auto render(const std::chrono::time_point<std::chrono::steady_clock> &time) -> void;
-        SDL_Window *window_;
-        SDL_Renderer *renderer_;
+        auto update(const std::chrono::nanoseconds &delta_time) -> void;
+        auto render(const std::chrono::nanoseconds &delta_time) -> void;
         bool is_running_;
     };
 }

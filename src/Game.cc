@@ -1,8 +1,14 @@
 #include "Game.h"
 
+#include <chrono>
+
 #include <SDL2/SDL.h>
 
 #include "Exception.h"
+
+using namespace std::literals::chrono_literals;
+
+#define NS_PER_UPDATE 1000
 
 namespace Breakout {
     Game::Game() {
@@ -31,8 +37,24 @@ namespace Breakout {
 
     auto Game::run() -> void {
         is_running_ = true;
+        constexpr std::chrono::nanoseconds timestep(16ms);
+
+        auto previous_time = std::chrono::steady_clock::now();
+        auto lag = std::chrono::nanoseconds{0ns};
         while (is_running_) {
+            auto current_time = std::chrono::steady_clock::now();
+            auto delta_time = current_time - previous_time;
+            previous_time = current_time;
+            lag += delta_time;
+
             poll_events();
+
+            while (lag > timestep) {
+                update(current_time);
+                lag -= timestep;
+            }
+
+            render(current_time);
         }
     }
 
@@ -51,6 +73,14 @@ namespace Breakout {
                 is_running_ = false;
             }
         }
+    }
+
+    auto Game::update(const std::chrono::time_point<std::chrono::steady_clock> &time) -> void {
+
+    }
+
+    auto Game::render(const std::chrono::time_point<std::chrono::steady_clock> &time) -> void {
+
     }
 
 } // namespace Breakout

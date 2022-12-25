@@ -1,10 +1,13 @@
 #include "Game.h"
 
 #include <chrono>
+#include <memory>
 
 #include <SDL2/SDL.h>
 
 #include "Exception.h"
+#include "Renderer.h"
+#include "Scene.h"
 
 using namespace std::literals::chrono_literals;
 
@@ -35,7 +38,10 @@ namespace Breakout {
 
     auto Game::run() -> void {
         is_running_ = true;
-        constexpr std::chrono::nanoseconds timestep{16ms};
+        constexpr auto timestep = std::chrono::nanoseconds{16ms};
+
+        auto renderer = std::make_shared<Renderer>(renderer_);
+        auto scene = Scene{renderer};
 
         auto previous_time = std::chrono::steady_clock::now();
         auto lag = std::chrono::nanoseconds{0ns};
@@ -48,11 +54,12 @@ namespace Breakout {
             poll_events();
 
             while (lag > timestep) {
-                update(lag);
+                scene.update(lag);
                 lag -= timestep;
             }
 
-            render(lag / timestep);
+            scene.render(lag);
+            SDL_RenderPresent(renderer_);
         }
     }
 
@@ -63,14 +70,6 @@ namespace Breakout {
                 is_running_ = false;
             }
         }
-    }
-
-    auto Game::update(const std::chrono::nanoseconds &delta_time) -> void {
-
-    }
-
-    auto Game::render(const std::chrono::nanoseconds &delta_time) -> void {
-
     }
 
 } // namespace Breakout

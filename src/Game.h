@@ -1,4 +1,5 @@
 #ifndef _BREAKOUT_GAME_H
+#define _BREAKOUT_GAME_H
 
 #include <chrono>
 
@@ -10,13 +11,11 @@ namespace Breakout {
         Game();
         ~Game();
         auto run() -> void;
-        auto window() const noexcept -> SDL_Window *;
-        auto renderer() const noexcept -> SDL_Renderer *;
     private:
         auto poll_events() -> void;
-        auto update(const std::chrono::nanoseconds &delta_time) -> void;
-        auto render(const std::chrono::nanoseconds &delta_time) -> void;
         bool is_running_;
+        SDL_Window *window_;
+        SDL_Renderer *renderer_;
     };
 }
 

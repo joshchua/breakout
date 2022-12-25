@@ -1,4 +1,5 @@
 #ifndef _BREAKOUT_EXCEPTION_H
+#define _BREAKOUT_EXCEPTION_H
 
 #include <exception>
 #include <string>

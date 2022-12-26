@@ -20,6 +20,10 @@ auto Renderer::draw_rect(float x, float y, float w, float h, const Color &color)
     SDL_RenderFillRectF(renderer_, &rect);
 }
 
+auto Renderer::draw_circle(float x, float y, float r, const Color &color) const noexcept -> void {
+    set_render_color(color);
+}
+
 auto Renderer::clear() const noexcept -> void {
     set_render_color(Color::cornflower_blue());
     SDL_RenderClear(renderer_);

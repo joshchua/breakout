@@ -12,9 +12,9 @@ public:
     float radius;
     Vector2D position;
     Vector2D velocity;
-    auto draw(const Renderer *renderer) -> void;
+    auto draw(const Renderer &renderer) const noexcept -> void;
 };
 
 } // namespace Breakout
 
-#endif
+#endif // _BREAKOUT_BALL_H

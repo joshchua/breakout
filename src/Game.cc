@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 
 #include "Exception.h"
+#include "Level.h"
+#include "LevelLoader.h"
 #include "Renderer.h"
 #include "Scene.h"
 
@@ -40,8 +42,11 @@ namespace Breakout {
         is_running_ = true;
         constexpr auto timestep = std::chrono::nanoseconds{16ms};
 
+        auto level_loader = LevelLoader{};
+        auto levels = level_loader.load("");
+
         auto renderer = std::make_shared<Renderer>(renderer_);
-        auto scene = Scene{renderer};
+        auto scene = Scene{renderer, levels};
 
         auto previous_time = std::chrono::steady_clock::now();
         auto lag = std::chrono::nanoseconds{0ns};
@@ -64,7 +69,7 @@ namespace Breakout {
     }
 
     auto Game::poll_events() -> void {
-        SDL_Event event;
+        auto event = SDL_Event{};
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 is_running_ = false;

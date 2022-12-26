@@ -12,6 +12,7 @@ public:
     Renderer(SDL_Renderer *renderer);
     ~Renderer();
     auto draw_rect(float x, float y, float w, float h, const Color &color) const noexcept -> void;
+    auto draw_circle(float x, float y, float r, const Color &color) const noexcept -> void;
     auto clear() const noexcept -> void;
 
 private:
